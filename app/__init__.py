@@ -13,13 +13,7 @@ def create_app():
     jwt.init_app(app)
     migrate.init_app(app, db)
 
-
- # Health check
-    @app.route("/health")
-    def health():
-        return {"status": "ok", "message": "Support Assistant backend running"}
-
-
+    #app registration by using Blueprint
     from app.auth.routes import auth_bp
     app.register_blueprint(auth_bp)
 
