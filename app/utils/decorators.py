@@ -1,15 +1,18 @@
-from flask_jwt_extended import get_jwt_identity
+from flask_jwt_extended import get_jwt
 from functools import wraps
-from flask import jsonify
+
 
 def role_required(*roles):
-    def wrapper(fn):
+    def decorator(fn):
         @wraps(fn)
-        def decorator(*args, **kwargs):
-            user=get_jwt_identity()
-            if user["role"] not in roles:
-                return jsonify({"message":"Access Forbidden."}),403
+        def wrapper(*args, **kwargs):
+            claims = get_jwt()
+            user_role = claims.get("role")
+
+            if user_role not in roles:
+                return {"message": "Access denied"}, 403
+
             return fn(*args, **kwargs)
-        return decorator
-    return wrapper
+        return wrapper
+    return decorator
 

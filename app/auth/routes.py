@@ -21,12 +21,21 @@ def register():
     return {"message":"user register successfully."},201
 
 
-@auth_bp.route('login',methods=['POST'])
+@auth_bp.route('/login', methods=['POST'])
 def login():
-    data=request.get_json()
-    user=User.query.filter_by(email=data['email']).first()
-    if not user or not user.check_password(data['password']):
-        return {"message":"Invalid credentials"},401
+    data = request.get_json()
 
-    token=create_access_token(identity={"id":user.id,"role":user.role})
-    return {"access_token":token,"role":user.role}
+    user = User.query.filter_by(email=data['email']).first()
+    if not user or not user.check_password(data['password']):
+        return {"message": "Invalid credentials"}, 401
+
+    access_token = create_access_token(
+        identity=str(user.id),
+        additional_claims={"role": user.role}
+    )
+
+    return {
+        "access_token": access_token,
+        "role": user.role
+    }, 200
+
