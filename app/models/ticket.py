@@ -9,6 +9,6 @@ class Ticket(db.Model):
     status=db.Column(db.String(20),default="OPEN")
 
     created_by=db.Column(db.Integer, db.ForeignKey("users.id"),nullable=False)
-    assigned_db=db.Column(db.Integer, db.ForeignKey("users.id"),nullable=False)
+    assigned_db=db.Column(db.Integer, db.ForeignKey("users.id"),nullable=True)
 
     created_at=db.Column(db.DateTime, server_default=db.func.now())
