@@ -2,6 +2,7 @@ from flask import Flask
 from config import Config
 from app.extensions import db,jwt, migrate
 import os
+from app.scheduler import start_scheduler
 
 def create_app():
     app=Flask(__name__)
@@ -24,7 +25,9 @@ def create_app():
     from app.tickets.routes import ticket_bp
     app.register_blueprint(ticket_bp)
 
-
     from app.comment.routes import comment_bp
     app.register_blueprint(comment_bp)
+
+    start_scheduler()
+
     return app
