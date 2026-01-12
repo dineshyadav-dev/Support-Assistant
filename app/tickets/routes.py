@@ -10,6 +10,8 @@ from app.tickets.services import (
 )
 from app.utils.decorators import role_required
 
+
+
 ticket_bp = Blueprint("tickets", __name__, url_prefix="/tickets")
 
 
@@ -90,4 +92,3 @@ def upload_attachment(ticket_id):
         return {"message": error}, 403
 
     return {"message": "Attachment uploaded"}, 201
-

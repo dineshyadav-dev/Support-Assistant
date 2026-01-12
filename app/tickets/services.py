@@ -6,6 +6,7 @@ from app.extensions import db
 from app.models.ticket import Ticket
 from app.models.attachment import Attachment
 from app.tickets.permissions import can_upload_attachment
+from app.tasks.notifications import ticket_assigned_log
 
 
 UPLOAD_FOLDER = "uploads/tickets"
@@ -32,6 +33,8 @@ def assign_ticket_service(ticket_id, agent_id):
     ticket.assigned_to = agent_id
     ticket.status = "IN_PROGRESS"
     db.session.commit()
+
+    ticket_assigned_log.delay(ticket_id, agent_id)
     return ticket
 
 def update_ticket_status_service(ticket_id, new_status, role):
