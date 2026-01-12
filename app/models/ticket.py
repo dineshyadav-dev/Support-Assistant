@@ -12,3 +12,4 @@ class Ticket(db.Model):
     assigned_to=db.Column(db.Integer, db.ForeignKey("users.id"),nullable=True)
 
     created_at=db.Column(db.DateTime, server_default=db.func.now())
+    updated_at = db.Column(db.DateTime,server_default=db.func.now(),onupdate=db.func.now())
