@@ -1,1 +1,2 @@
 # Support-Assistant
+A role-based Support ticket Management System built with Flask, implementing JWT authentication, clean service-layer architecture, ticket assignment, status management, file attachments, and comments with proper access control
