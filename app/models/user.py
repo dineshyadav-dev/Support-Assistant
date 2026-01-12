@@ -13,8 +13,8 @@ class User(db.Model):
 
 
     def set_password(self,password):
-        self.password_hash=generate_password_hash(password)
+        self.password_hash=generate_password_hash(password)            #it generate hash password and return to services
 
     def check_password(self,password):
-        return check_password_hash(self.password_hash,password)
+        return check_password_hash(self.password_hash,password)       #it check the password in db &give result to login service
 
