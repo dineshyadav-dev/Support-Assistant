@@ -6,7 +6,7 @@ from app.extensions import db
 from app.models.ticket import Ticket
 from app.models.attachment import Attachment
 from app.tickets.permissions import can_upload_attachment
-#from app.tasks.notifications import ticket_assigned_log
+from app.tasks.notifications import ticket_assigned_log
 
 
 UPLOAD_FOLDER = "uploads/tickets"
@@ -34,7 +34,11 @@ def assign_ticket_service(ticket_id, agent_id):
     ticket.status = "IN_PROGRESS"
     db.session.commit()
 
-    # ticket_assigned_log.delay(ticket_id, agent_id)
+    try:
+        ticket_assigned_log.delay(ticket_id, agent_id)
+    except Exception as e:
+        print("Celery is Failed:",e)
+
     return ticket
 
 def update_ticket_status_service(ticket_id, new_status, role):
@@ -58,7 +62,7 @@ def update_ticket_status_service(ticket_id, new_status, role):
 
 def upload_attachment_service(user_id, role, ticket, file):
     if not can_upload_attachment(user_id, role, ticket):
-        return None, "Not allowed"
+        return None, f"For This user permission not allowed"
 
     filename = secure_filename(file.filename)
     file_path = os.path.join(UPLOAD_FOLDER, filename)
