@@ -1,7 +1,6 @@
 from app.extensions import db
 from app.models.user import User
-from flask_jwt_extended import create_access_token
-
+from flask_jwt_extended import create_access_token,create_refresh_token
 ALLOWED_ROLES={"ADMIN", "AGENT", "USER"}
 
 def register_user_service(data):
@@ -33,7 +32,9 @@ def login_user_service(data):
         additional_claims={"role": user.role}
     )
 
+    refresh_token=create_refresh_token(identity=str(user.id))
     return {
         "access_token": access_token,
+        "refresh_token":refresh_token,
         "role": user.role
     }, None
