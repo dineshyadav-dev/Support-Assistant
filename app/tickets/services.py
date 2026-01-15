@@ -79,3 +79,26 @@ def upload_attachment_service(user_id, role, ticket, file):
     db.session.add(attachment)
     db.session.commit()
     return attachment, None
+
+
+#filter functionality
+def get_tickets_service(filters, page, per_page):
+    query = Ticket.query
+
+    if filters.get("status"):
+        query = query.filter(Ticket.status == filters["status"])
+
+    if filters.get("assigned_to"):
+        query = query.filter(Ticket.assigned_to == filters["assigned_to"])
+
+    if filters.get("created_by"):
+        query = query.filter(Ticket.created_by == filters["created_by"])
+
+    pagination = query.order_by(Ticket.created_at.desc()).paginate(
+        page=page,
+        per_page=per_page,
+        error_out=False
+    )
+
+    return pagination
+
